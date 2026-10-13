@@ -107,10 +107,14 @@ cd "$TARGET_DIR"
 export npm_config_cache="$HOME/Library/Caches/raycast-extension-installer/npm"
 export npm_config_update_notifier=false npm_config_fund=false npm_config_audit=false npm_config_loglevel=error
 mkdir -p "$npm_config_cache"
-if [[ -f package-lock.json ]]; then INSTALL_CMD=(npm ci); else INSTALL_CMD=(npm install); fi
-if ! NPM_OUT="$("${INSTALL_CMD[@]}" 2>&1)"; then
-  echo "$NPM_OUT" | tail -n 20
-  fail "npm could not install the dependencies (output above)."
+# npm ci installs exactly what the lockfile says. Some npm versions read a
+# lockfile written by another version as out of date; npm install then fixes it.
+if ! NPM_OUT="$(npm ci 2>&1)"; then
+  info "npm ci did not accept the lockfile – trying npm install instead…"
+  if ! NPM_OUT="$(npm install 2>&1)"; then
+    echo "$NPM_OUT" | tail -n 20
+    fail "npm could not install the dependencies (output above)."
+  fi
 fi
 info "Done."
 
