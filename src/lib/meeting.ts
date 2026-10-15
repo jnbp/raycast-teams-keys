@@ -50,7 +50,7 @@ export const MEETING_ACTIONS: MeetingAction[] = [
     id: "hand",
     title: "Raise or Lower Hand",
     hud: "Raised or lowered your hand",
-    icon: "✋",
+    icon: "✋🏽",
     key: { char: "k" },
     modifiers: ["command", "shift"],
   },

@@ -22,13 +22,32 @@ export type Modifier = "command" | "shift" | "option" | "control";
 export const RETURN: Key = { code: 36 };
 export const ESCAPE: Key = { code: 53 };
 
-const TIMING_FACTOR: Record<string, number> = { veryFast: 0.35, fast: 0.6, normal: 1, slow: 1.8, verySlow: 3 };
+const TIMING_FACTOR: Record<string, number> = {
+  instant: 0.1,
+  ultraFast: 0.2,
+  veryFast: 0.35,
+  fast: 0.6,
+  normal: 1,
+  slow: 1.8,
+  verySlow: 3,
+};
+
+/**
+ * How much every wait is stretched or shortened: the Timing preference, or the
+ * custom factor when Timing is set to Custom. Out-of-range input falls back to 1.
+ */
+export function timingFactor(): number {
+  const { timing, customTiming } = getPreferenceValues<Preferences>();
+  if (timing === "custom") {
+    const value = Number.parseFloat((customTiming ?? "").replace(",", "."));
+    return Number.isFinite(value) && value >= 0.05 && value <= 10 ? value : 1;
+  }
+  return TIMING_FACTOR[timing] ?? 1;
+}
 
 /** Waits `ms` milliseconds, stretched by the Timing preference. */
 export function pause(ms: number): Promise<void> {
-  const { timing } = getPreferenceValues<Preferences>();
-  const factor = TIMING_FACTOR[timing] ?? 1;
-  return new Promise((resolve) => setTimeout(resolve, Math.round(ms * factor)));
+  return new Promise((resolve) => setTimeout(resolve, Math.round(ms * timingFactor())));
 }
 
 /** AppleScript string literal. Only ever used for values the extension controls. */
@@ -72,13 +91,16 @@ export async function activateTeams(): Promise<void> {
   await runAppleScript(`tell application id ${quote(TEAMS_BUNDLE_ID)} to activate`);
   // A cold start takes a few seconds before Teams accepts input.
   const deadline = Date.now() + (running ? 3000 : 20000);
+  const poll = Math.max(30, Math.round(150 * Math.min(timingFactor(), 1)));
   while (Date.now() < deadline) {
     const front = await getFrontmostApplication().catch(() => undefined);
     if (front?.bundleId === TEAMS_BUNDLE_ID) {
-      await pause(running ? 250 : 4000);
+      // After a cold start Teams needs its time however fast the Timing is.
+      if (running) await pause(250);
+      else await new Promise((resolve) => setTimeout(resolve, Math.max(2500, 4000 * timingFactor())));
       return;
     }
-    await new Promise((resolve) => setTimeout(resolve, 150));
+    await new Promise((resolve) => setTimeout(resolve, poll));
   }
   throw new TeamsError("Teams did not come to the front. Open it once by hand, then try again.");
 }
