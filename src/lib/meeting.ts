@@ -24,6 +24,8 @@ export interface MeetingAction {
   icon: Image.ImageLike;
   key: Key;
   modifiers: Modifier[];
+  /** Leave Teams in front afterwards, because the user picks something there next. */
+  staysInTeams?: boolean;
 }
 
 /** The official Teams shortcuts for macOS. They work while a call is running. */
@@ -53,6 +55,15 @@ export const MEETING_ACTIONS: MeetingAction[] = [
     modifiers: ["command", "shift"],
   },
   {
+    id: "share",
+    title: "Share Content",
+    hud: "Opened Share content in Teams",
+    icon: Icon.Desktop,
+    key: { char: "e" },
+    modifiers: ["command", "shift"],
+    staysInTeams: true,
+  },
+  {
     id: "lobby",
     title: "Admit from Lobby",
     hud: "Admitted from the lobby",
@@ -74,9 +85,9 @@ export const MEETING_ACTIONS: MeetingAction[] = [
  * Runs a quick action in Teams and goes back to the app the user was in, if
  * the preference says so.
  */
-export async function inTeams(work: () => Promise<void>): Promise<void> {
+export async function inTeams(work: () => Promise<void>, stay = false): Promise<void> {
   const { returnToPreviousApp } = getPreferenceValues<Preferences>();
-  const previous = returnToPreviousApp ? await rememberFrontApp() : undefined;
+  const previous = returnToPreviousApp && !stay ? await rememberFrontApp() : undefined;
   await activateTeams();
   await work();
   if (previous) {
@@ -88,7 +99,7 @@ export async function inTeams(work: () => Promise<void>): Promise<void> {
 export async function runMeetingAction(id: string): Promise<void> {
   const action = MEETING_ACTIONS.find((a) => a.id === id);
   if (!action) throw new TeamsError(`Unknown meeting action: ${id}`);
-  await inTeams(() => press(action.key, action.modifiers));
+  await inTeams(() => press(action.key, action.modifiers), action.staysInTeams);
   await showHUD(action.hud);
 }
 
@@ -151,6 +162,16 @@ export async function setStatus(value: string): Promise<string> {
     await press(ESCAPE);
   });
   return status.title;
+}
+
+/** Body of the one-status commands, so each status can have its own hotkey. */
+export async function setStatusCommand(value: string): Promise<void> {
+  try {
+    const title = await setStatus(value);
+    await showHUD(`Teams status: ${title}`);
+  } catch (error) {
+    await report(error, "Could not set the status");
+  }
 }
 
 /** Shared error handling for the no-view commands. */
