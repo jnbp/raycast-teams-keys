@@ -65,7 +65,9 @@ export async function isTeamsRunning(): Promise<boolean> {
 export async function activateTeams(): Promise<void> {
   const running = await isTeamsRunning();
   if (!running && !(await isTeamsInstalled())) {
-    throw new TeamsError("Microsoft Teams is not installed. Microsoft Teams Keys works with the new Teams desktop app.");
+    throw new TeamsError(
+      "Microsoft Teams is not installed. Microsoft Teams Keys works with the new Teams desktop app.",
+    );
   }
   await runAppleScript(`tell application id ${quote(TEAMS_BUNDLE_ID)} to activate`);
   // A cold start takes a few seconds before Teams accepts input.
@@ -129,7 +131,9 @@ export async function returnTo(bundleId: string | undefined): Promise<void> {
  */
 export async function openInTeams(httpsUrl: string): Promise<void> {
   if (!(await isTeamsRunning()) && !(await isTeamsInstalled())) {
-    throw new TeamsError("Microsoft Teams is not installed. Microsoft Teams Keys works with the new Teams desktop app.");
+    throw new TeamsError(
+      "Microsoft Teams is not installed. Microsoft Teams Keys works with the new Teams desktop app.",
+    );
   }
   await open(httpsUrl.replace(/^https:/, "msteams:"));
 }

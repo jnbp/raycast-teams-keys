@@ -35,11 +35,14 @@ through Teams links, the official keyboard shortcuts and the Teams slash command
 | **Open Teams Chat** | Opens the chat with a person and types an optional message. Leaves it as a draft or sends it (preference) |
 | **Send Teams Message** | Opens the chat and sends the message right away |
 | **Teams Contacts** | Short names for the people you message most – chat, message, call or video call them |
-| **Control Teams Meeting** | Microphone, camera, raise hand, admit from lobby, leave call and your status in one list |
+| **Control Teams Meeting** | Microphone, camera, raise hand, share content, admit from lobby, leave call and your status in one list |
 | **Toggle Teams Microphone / Camera** | Mute or unmute, camera on or off |
 | **Raise or Lower Hand in Teams** | Raise or lower your hand |
 | **Leave Teams Call** | Hang up |
+| **Share Screen in Teams** | Opens *Share content* (`⌘⇧E`); you pick the screen or window, Teams stays in front |
+| **Admit from Teams Lobby** | Lets in the people waiting in the lobby |
 | **Set Teams Status** | Available, Busy, Do Not Disturb, Be Right Back, Away or Offline (English and German Teams) |
+| **Set Teams Status to …** | One command per status (Available, Busy, Do Not Disturb, Be Right Back, Away, Offline), so each can have its own hotkey |
 | **Start Teams Call** | Audio or video call; Teams asks once more before it dials |
 | **Teams Meetings** | Your Teams meetings for the next seven days, from the Calendar app – join with Return |
 | **Join Next Teams Meeting** | Joins the meeting that is running or starts within 15 minutes |
@@ -64,7 +67,7 @@ Open Teams Chat, Send Teams Message and Start Teams Call take:
 | --- | --- |
 | Chats, messages, calls, joining and scheduling meetings | Teams links (`msteams:`), the same ones the "Open in app" buttons use |
 | Sending a message, names without an address | The Teams search (`⌘E`) and Return |
-| Meeting controls | The official Teams shortcuts (`⌘⇧M`, `⌘⇧O`, `⌘⇧K`, `⌘⇧Y`, `⌘⇧H`) |
+| Meeting controls | The official Teams shortcuts (`⌘⇧M`, `⌘⇧O`, `⌘⇧K`, `⌘⇧E`, `⌘⇧Y`, `⌘⇧H`) |
 | Status | The Teams slash commands (`/available`, `/busy` … or `/verfügbar`, `/beschäftigt` …, depending on the Teams language) |
 | Upcoming meetings | The macOS calendar database, so the work account must be added to the Calendar app |
 
