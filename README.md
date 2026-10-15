@@ -115,7 +115,8 @@ Microsoft switched off the local Teams API that third-party tools such as Stream
 <details>
 <summary><b>Teams misses a keystroke.</b></summary>
 
-Set **Timing** to *Slow* or *Very Slow* in the extension preferences. Teams then gets more time between steps.
+Set **Timing** to *Slow* or *Very Slow* in the extension preferences. Teams then gets more time between steps. If Teams keeps up
+well, *Fast* down to *Instant* make every command quicker; *Custom Factor* takes any value from 0.05 to 10 (1 is Normal).
 </details>
 
 <details>

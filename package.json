@@ -108,42 +108,81 @@
       "title": "Toggle Teams Microphone",
       "subtitle": "Microsoft Teams",
       "description": "Mutes or unmutes you in the current Teams call.",
-      "mode": "no-view"
+      "mode": "no-view",
+      "keywords": [
+        "mute",
+        "unmute",
+        "microphone",
+        "mikrofon",
+        "stumm",
+        "stummschalten"
+      ]
     },
     {
       "name": "toggle-camera",
       "title": "Toggle Teams Camera",
       "subtitle": "Microsoft Teams",
       "description": "Turns your camera on or off in the current Teams call.",
-      "mode": "no-view"
+      "mode": "no-view",
+      "keywords": [
+        "camera",
+        "video",
+        "kamera"
+      ]
     },
     {
       "name": "raise-hand",
       "title": "Raise or Lower Hand in Teams",
       "subtitle": "Microsoft Teams",
       "description": "Raises or lowers your hand in the current Teams meeting.",
-      "mode": "no-view"
+      "mode": "no-view",
+      "keywords": [
+        "hand",
+        "raise hand",
+        "hand heben",
+        "melden"
+      ]
     },
     {
       "name": "leave-call",
       "title": "Leave Teams Call",
       "subtitle": "Microsoft Teams",
       "description": "Hangs up the current Teams call.",
-      "mode": "no-view"
+      "mode": "no-view",
+      "keywords": [
+        "hang up",
+        "leave",
+        "auflegen",
+        "verlassen"
+      ]
     },
     {
       "name": "share-screen",
       "title": "Share Screen in Teams",
       "subtitle": "Microsoft Teams",
       "description": "Opens Share content in the current Teams call (⌘⇧E), where you pick your screen or a window. Teams stays in front so you can choose.",
-      "mode": "no-view"
+      "mode": "no-view",
+      "keywords": [
+        "share",
+        "screen",
+        "present",
+        "bildschirm teilen",
+        "inhalt freigeben",
+        "präsentieren"
+      ]
     },
     {
       "name": "admit-from-lobby",
       "title": "Admit from Teams Lobby",
       "subtitle": "Microsoft Teams",
       "description": "Admits the people waiting in the lobby of the current Teams meeting.",
-      "mode": "no-view"
+      "mode": "no-view",
+      "keywords": [
+        "lobby",
+        "admit",
+        "wartebereich",
+        "zulassen"
+      ]
     },
     {
       "name": "set-status",
@@ -191,42 +230,62 @@
       "title": "Set Teams Status to Available",
       "subtitle": "Microsoft Teams",
       "description": "Sets your Teams presence to Available. Give it a hotkey to switch with one key press.",
-      "mode": "no-view"
+      "mode": "no-view",
+      "keywords": [
+        "verfügbar"
+      ]
     },
     {
       "name": "status-busy",
       "title": "Set Teams Status to Busy",
       "subtitle": "Microsoft Teams",
       "description": "Sets your Teams presence to Busy. Give it a hotkey to switch with one key press.",
-      "mode": "no-view"
+      "mode": "no-view",
+      "keywords": [
+        "beschäftigt"
+      ]
     },
     {
       "name": "status-dnd",
       "title": "Set Teams Status to Do Not Disturb",
       "subtitle": "Microsoft Teams",
       "description": "Sets your Teams presence to Do Not Disturb. Give it a hotkey to switch with one key press.",
-      "mode": "no-view"
+      "mode": "no-view",
+      "keywords": [
+        "nicht stören",
+        "dnd"
+      ]
     },
     {
       "name": "status-brb",
       "title": "Set Teams Status to Be Right Back",
       "subtitle": "Microsoft Teams",
       "description": "Sets your Teams presence to Be Right Back. Give it a hotkey to switch with one key press.",
-      "mode": "no-view"
+      "mode": "no-view",
+      "keywords": [
+        "bin gleich zurück",
+        "brb"
+      ]
     },
     {
       "name": "status-away",
       "title": "Set Teams Status to Away",
       "subtitle": "Microsoft Teams",
       "description": "Sets your Teams presence to Away. Give it a hotkey to switch with one key press.",
-      "mode": "no-view"
+      "mode": "no-view",
+      "keywords": [
+        "abwesend"
+      ]
     },
     {
       "name": "status-offline",
       "title": "Set Teams Status to Offline",
       "subtitle": "Microsoft Teams",
       "description": "Sets your Teams presence to Offline. Give it a hotkey to switch with one key press.",
-      "mode": "no-view"
+      "mode": "no-view",
+      "keywords": [
+        "offline"
+      ]
     },
     {
       "name": "start-call",
@@ -340,32 +399,53 @@
     {
       "name": "timing",
       "title": "Timing",
-      "description": "How long the extension waits for Teams between steps, for example when it opens a chat or sends a message. Faster settings save time; pick a slower one if Teams misses keystrokes.",
+      "description": "How long the extension waits for Teams between steps, in every command: meeting controls, screen sharing, status, chats and messages. Normal is recommended; pick a faster one if Teams keeps up on your Mac, a slower one if it misses keystrokes.",
       "type": "dropdown",
       "required": false,
       "default": "normal",
       "data": [
         {
-          "title": "Very Fast",
+          "title": "Instant (0.1×)",
+          "value": "instant"
+        },
+        {
+          "title": "Ultra Fast (0.2×)",
+          "value": "ultraFast"
+        },
+        {
+          "title": "Very Fast (0.35×)",
           "value": "veryFast"
         },
         {
-          "title": "Fast",
+          "title": "Fast (0.6×)",
           "value": "fast"
         },
         {
-          "title": "Normal",
+          "title": "Normal (1×, Recommended)",
           "value": "normal"
         },
         {
-          "title": "Slow",
+          "title": "Slow (1.8×)",
           "value": "slow"
         },
         {
-          "title": "Very Slow",
+          "title": "Very Slow (3×)",
           "value": "verySlow"
+        },
+        {
+          "title": "Custom Factor",
+          "value": "custom"
         }
       ]
+    },
+    {
+      "name": "customTiming",
+      "title": "Custom Timing Factor",
+      "description": "Used when Timing is set to Custom Factor. Multiplies every wait: 1 is Normal, 0.5 half as long, 2 twice as long. Allowed: 0.05 to 10.",
+      "type": "textfield",
+      "required": false,
+      "default": "1",
+      "placeholder": "e.g. 0.5"
     }
   ],
   "dependencies": {
