@@ -8,6 +8,7 @@ import {
   Modifier,
   RETURN,
   TeamsError,
+  TimingKind,
   activateTeams,
   pause,
   press,
@@ -85,13 +86,13 @@ export const MEETING_ACTIONS: MeetingAction[] = [
  * Runs a quick action in Teams and goes back to the app the user was in, if
  * the preference says so.
  */
-export async function inTeams(work: () => Promise<void>, stay = false): Promise<void> {
+export async function inTeams(work: () => Promise<void>, kind: TimingKind, stay = false): Promise<void> {
   const { returnToPreviousApp } = getPreferenceValues<Preferences>();
   const previous = returnToPreviousApp && !stay ? await rememberFrontApp() : undefined;
-  await activateTeams();
+  await activateTeams(kind);
   await work();
   if (previous) {
-    await pause(200);
+    await pause(200, kind);
     await returnTo(previous);
   }
 }
@@ -99,7 +100,7 @@ export async function inTeams(work: () => Promise<void>, stay = false): Promise<
 export async function runMeetingAction(id: string): Promise<void> {
   const action = MEETING_ACTIONS.find((a) => a.id === id);
   if (!action) throw new TeamsError(`Unknown meeting action: ${id}`);
-  await inTeams(() => press(action.key, action.modifiers), action.staysInTeams);
+  await inTeams(() => press(action.key, action.modifiers), "shortcuts", action.staysInTeams);
   await showHUD(action.hud);
 }
 
@@ -160,7 +161,7 @@ export async function setStatus(value: string): Promise<string> {
     await press(RETURN);
     await pause(600);
     await press(ESCAPE);
-  });
+  }, "search");
   return status.title;
 }
 

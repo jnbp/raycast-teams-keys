@@ -33,21 +33,32 @@ const TIMING_FACTOR: Record<string, number> = {
 };
 
 /**
- * How much every wait is stretched or shortened: the Timing preference, or the
- * custom factor when Timing is set to Custom. Out-of-range input falls back to 1.
+ * Two separate speeds: meeting shortcuts are one keystroke Teams answers at
+ * once, while chats, messages and status go through the Teams search, which
+ * first has to find something.
  */
-export function timingFactor(): number {
-  const { timing, customTiming } = getPreferenceValues<Preferences>();
-  if (timing === "custom") {
-    const value = Number.parseFloat((customTiming ?? "").replace(",", "."));
+export type TimingKind = "shortcuts" | "search";
+
+/**
+ * How much the waits of one kind are stretched or shortened: the preset, or the
+ * custom factor when the preset is Custom Factor. Out-of-range input falls back to 1.
+ */
+export function timingFactor(kind: TimingKind): number {
+  const prefs = getPreferenceValues<Preferences>();
+  const [preset, custom] =
+    kind === "shortcuts"
+      ? [prefs.shortcutTiming, prefs.customShortcutTiming]
+      : [prefs.searchTiming, prefs.customSearchTiming];
+  if (preset === "custom") {
+    const value = Number.parseFloat((custom ?? "").replace(",", "."));
     return Number.isFinite(value) && value >= 0.05 && value <= 10 ? value : 1;
   }
-  return TIMING_FACTOR[timing] ?? 1;
+  return TIMING_FACTOR[preset] ?? 1;
 }
 
-/** Waits `ms` milliseconds, stretched by the Timing preference. */
-export function pause(ms: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, Math.round(ms * timingFactor())));
+/** Waits `ms` milliseconds, stretched by the timing preference of that kind. */
+export function pause(ms: number, kind: TimingKind = "search"): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, Math.round(ms * timingFactor(kind))));
 }
 
 /** AppleScript string literal. Only ever used for values the extension controls. */
@@ -81,7 +92,7 @@ export async function isTeamsRunning(): Promise<boolean> {
  * Brings Teams to the front, starting it if needed, and waits until it is the
  * frontmost app. Keystrokes sent before that would land in another app.
  */
-export async function activateTeams(): Promise<void> {
+export async function activateTeams(kind: TimingKind = "search"): Promise<void> {
   const running = await isTeamsRunning();
   if (!running && !(await isTeamsInstalled())) {
     throw new TeamsError(
@@ -91,13 +102,13 @@ export async function activateTeams(): Promise<void> {
   await runAppleScript(`tell application id ${quote(TEAMS_BUNDLE_ID)} to activate`);
   // A cold start takes a few seconds before Teams accepts input.
   const deadline = Date.now() + (running ? 3000 : 20000);
-  const poll = Math.max(30, Math.round(150 * Math.min(timingFactor(), 1)));
+  const poll = Math.max(30, Math.round(150 * Math.min(timingFactor(kind), 1)));
   while (Date.now() < deadline) {
     const front = await getFrontmostApplication().catch(() => undefined);
     if (front?.bundleId === TEAMS_BUNDLE_ID) {
       // After a cold start Teams needs its time however fast the Timing is.
-      if (running) await pause(250);
-      else await new Promise((resolve) => setTimeout(resolve, Math.max(2500, 4000 * timingFactor())));
+      if (running) await pause(250, kind);
+      else await new Promise((resolve) => setTimeout(resolve, Math.max(2500, 4000 * timingFactor(kind))));
       return;
     }
     await new Promise((resolve) => setTimeout(resolve, poll));
