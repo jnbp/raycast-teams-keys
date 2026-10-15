@@ -2,7 +2,7 @@
   "$schema": "https://www.raycast.com/schemas/extension.json",
   "name": "microsoft-teams-keys",
   "title": "Microsoft Teams Keys",
-  "description": "Drive the Microsoft Teams desktop app from the keyboard without signing in: open a chat and type or send a message, control your meeting, set your status, start calls and join or schedule meetings. Everything runs locally.",
+  "description": "Drive the Microsoft Teams desktop app from the keyboard without signing in: open a chat and type or send a message, control your meeting, share your screen, set your status, start calls and join or schedule meetings. Everything runs locally.",
   "icon": "icon.png",
   "author": "jnbp",
   "categories": [
@@ -18,7 +18,9 @@
     "mute",
     "status",
     "call",
-    "calendar"
+    "calendar",
+    "share screen",
+    "bildschirm teilen"
   ],
   "license": "MIT",
   "platforms": [
@@ -98,7 +100,7 @@
       "name": "control-meeting",
       "title": "Control Teams Meeting",
       "subtitle": "Microsoft Teams",
-      "description": "Microphone, camera, raise hand, admit from the lobby and leave the call from one list.",
+      "description": "Microphone, camera, raise hand, share content, admit from the lobby and leave the call from one list.",
       "mode": "view"
     },
     {
@@ -127,6 +129,20 @@
       "title": "Leave Teams Call",
       "subtitle": "Microsoft Teams",
       "description": "Hangs up the current Teams call.",
+      "mode": "no-view"
+    },
+    {
+      "name": "share-screen",
+      "title": "Share Screen in Teams",
+      "subtitle": "Microsoft Teams",
+      "description": "Opens Share content in the current Teams call (⌘⇧E), where you pick your screen or a window. Teams stays in front so you can choose.",
+      "mode": "no-view"
+    },
+    {
+      "name": "admit-from-lobby",
+      "title": "Admit from Teams Lobby",
+      "subtitle": "Microsoft Teams",
+      "description": "Admits the people waiting in the lobby of the current Teams meeting.",
       "mode": "no-view"
     },
     {
@@ -169,6 +185,48 @@
           ]
         }
       ]
+    },
+    {
+      "name": "status-available",
+      "title": "Set Teams Status to Available",
+      "subtitle": "Microsoft Teams",
+      "description": "Sets your Teams presence to Available. Give it a hotkey to switch with one key press.",
+      "mode": "no-view"
+    },
+    {
+      "name": "status-busy",
+      "title": "Set Teams Status to Busy",
+      "subtitle": "Microsoft Teams",
+      "description": "Sets your Teams presence to Busy. Give it a hotkey to switch with one key press.",
+      "mode": "no-view"
+    },
+    {
+      "name": "status-dnd",
+      "title": "Set Teams Status to Do Not Disturb",
+      "subtitle": "Microsoft Teams",
+      "description": "Sets your Teams presence to Do Not Disturb. Give it a hotkey to switch with one key press.",
+      "mode": "no-view"
+    },
+    {
+      "name": "status-brb",
+      "title": "Set Teams Status to Be Right Back",
+      "subtitle": "Microsoft Teams",
+      "description": "Sets your Teams presence to Be Right Back. Give it a hotkey to switch with one key press.",
+      "mode": "no-view"
+    },
+    {
+      "name": "status-away",
+      "title": "Set Teams Status to Away",
+      "subtitle": "Microsoft Teams",
+      "description": "Sets your Teams presence to Away. Give it a hotkey to switch with one key press.",
+      "mode": "no-view"
+    },
+    {
+      "name": "status-offline",
+      "title": "Set Teams Status to Offline",
+      "subtitle": "Microsoft Teams",
+      "description": "Sets your Teams presence to Offline. Give it a hotkey to switch with one key press.",
+      "mode": "no-view"
     },
     {
       "name": "start-call",
@@ -325,7 +383,7 @@
   "scripts": {
     "build": "ray build",
     "dev": "ray develop",
-    "fix-lint": "ray lint --fix",
+    "fix-lint": "ray lint",
     "lint": "ray lint",
     "prepublishOnly": "echo \"\\n\\nIt seems like you are trying to publish the Raycast extension to npm.\\n\\nIf you did intend to publish it to npm, remove the \\`prepublishOnly\\` script and rerun \\`npm publish\\` again.\\nIf you wanted to publish it to the Raycast Store instead, use \\`npm run publish\\` instead.\\n\\n\" && exit 1",
     "publish": "npx @raycast/api@latest publish"
