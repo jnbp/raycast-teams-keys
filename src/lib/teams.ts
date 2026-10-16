@@ -93,6 +93,15 @@ export async function isTeamsRunning(): Promise<boolean> {
  * frontmost app. Keystrokes sent before that would land in another app.
  */
 export async function activateTeams(kind: TimingKind = "search"): Promise<void> {
+  // Already in front: leave the window as it is. Activating again can pull
+  // the main window over the meeting window the user is working in.
+  const before = await getFrontmostApplication().catch(() => undefined);
+  if (before?.bundleId === TEAMS_BUNDLE_ID) {
+    await focusFrontWindow();
+    await pause(120, kind);
+    await waitForModifierRelease();
+    return;
+  }
   const running = await isTeamsRunning();
   if (!running && !(await isTeamsInstalled())) {
     throw new TeamsError(
@@ -109,11 +118,44 @@ export async function activateTeams(kind: TimingKind = "search"): Promise<void> 
       // After a cold start Teams needs its time however fast the Timing is.
       if (running) await pause(250, kind);
       else await new Promise((resolve) => setTimeout(resolve, Math.max(2500, 4000 * timingFactor(kind))));
+      await waitForModifierRelease();
       return;
     }
     await new Promise((resolve) => setTimeout(resolve, poll));
   }
   throw new TeamsError("Teams did not come to the front. Open it once by hand, then try again.");
+}
+
+/**
+ * Makes the frontmost Teams window the key window again. After the Raycast
+ * window closes, Teams can be the active app with no window focused, and a
+ * shortcut then only produces the macOS error sound. Raising the window that
+ * is already on top keeps the meeting window where it is.
+ */
+async function focusFrontWindow(): Promise<void> {
+  await runAppleScript(
+    `tell application "System Events"
+  tell (first application process whose bundle identifier is ${quote(TEAMS_BUNDLE_ID)})
+    set frontmost to true
+    if (count of windows) > 0 then perform action "AXRaise" of window 1
+  end tell
+end tell`,
+  ).catch(() => undefined);
+}
+
+/**
+ * Waits (up to 1.5 s) until no modifier key is held. A Raycast hotkey such as
+ * ⌥⌘M is often still pressed when the command runs; a shortcut sent then
+ * arrives as ⌥⌘⇧M instead of ⌘⇧M and Teams ignores it.
+ */
+async function waitForModifierRelease(): Promise<void> {
+  await runAppleScript(
+    `ObjC.import("AppKit");
+const mask = (1 << 17) | (1 << 18) | (1 << 19) | (1 << 20);
+const end = Date.now() + 1500;
+while (Date.now() < end && ($.NSEvent.modifierFlags & mask) !== 0) delay(0.02);`,
+    { language: "JavaScript" },
+  ).catch(() => undefined);
 }
 
 /**
@@ -150,7 +192,8 @@ export async function typeText(text: string): Promise<void> {
 /** Remembers the app in front, so it can come back after a quick trip to Teams. */
 export async function rememberFrontApp(): Promise<string | undefined> {
   const front = await getFrontmostApplication().catch(() => undefined);
-  return front && front.bundleId !== TEAMS_BUNDLE_ID ? front.bundleId : undefined;
+  if (!front || front.bundleId === TEAMS_BUNDLE_ID || front.bundleId?.startsWith("com.raycast.")) return undefined;
+  return front.bundleId;
 }
 
 export async function returnTo(bundleId: string | undefined): Promise<void> {

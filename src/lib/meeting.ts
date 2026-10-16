@@ -1,4 +1,4 @@
-import { Icon, Image, getPreferenceValues, showHUD } from "@raycast/api";
+import { Icon, Image, closeMainWindow, getPreferenceValues, showHUD } from "@raycast/api";
 import { showFailureToast } from "@raycast/utils";
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";
@@ -89,6 +89,8 @@ export const MEETING_ACTIONS: MeetingAction[] = [
 export async function inTeams(work: () => Promise<void>, kind: TimingKind, stay = false): Promise<void> {
   const { returnToPreviousApp } = getPreferenceValues<Preferences>();
   const previous = returnToPreviousApp && !stay ? await rememberFrontApp() : undefined;
+  // Started from the Raycast window: get it out of the way before Teams gets the keys.
+  await closeMainWindow();
   await activateTeams(kind);
   await work();
   if (previous) {
