@@ -313,8 +313,21 @@
       "mode": "no-view"
     },
     {
-      "name": "join-meeting",
+      "name": "choose-meeting",
       "title": "Join Teams Meeting",
+      "description": "Pick the Teams meeting to join: what is running or starts within 15 minutes comes first, then the rest of today and tomorrow. Also joins a Teams link from the clipboard or the search bar.",
+      "mode": "view",
+      "keywords": [
+        "join",
+        "meeting",
+        "besprechung",
+        "beitreten",
+        "call"
+      ]
+    },
+    {
+      "name": "join-meeting",
+      "title": "Join Teams Meeting from Link",
       "description": "Opens a Teams meeting link in the desktop app. Takes the link as an argument or from the clipboard, and unwraps Outlook Safe Links.",
       "mode": "no-view",
       "arguments": [

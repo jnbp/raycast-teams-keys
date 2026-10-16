@@ -46,7 +46,8 @@ through Teams links, the official keyboard shortcuts and the Teams slash command
 | **Start Teams Call** | Audio or video call; Teams asks once more before it dials |
 | **Teams Meetings** | Your Teams meetings for the next seven days, from the Calendar app – join with Return |
 | **Join Next Teams Meeting** | Joins the meeting that is running or starts within 15 minutes |
-| **Join Teams Meeting** | Opens a meeting link from the argument or the clipboard in the app, Outlook Safe Links included |
+| **Join Teams Meeting** | Pick the meeting to join – running and starting soon first, then later today and tomorrow; also takes a link from the clipboard or the search bar |
+| **Join Teams Meeting from Link** | Opens a meeting link from the argument or the clipboard in the app, Outlook Safe Links included |
 | **Schedule Teams Meeting** | Fills in the Teams new meeting form with subject, attendees, start and duration |
 
 > [!TIP]
