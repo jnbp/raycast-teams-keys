@@ -41,6 +41,7 @@ through Teams links, the official keyboard shortcuts and the Teams slash command
 | **Leave Teams Call** | Hang up |
 | **Share Screen in Teams** | Opens *Share content* (`⌘⇧E`); you pick the screen or window, Teams stays in front |
 | **Admit from Teams Lobby** | Lets in the people waiting in the lobby |
+| **Bring Current Teams Call to Front** | Brings the window of the running call or meeting to the front, also when it is minimised |
 | **Set Teams Status** | Available, Busy, Do Not Disturb, Be Right Back, Away or Offline (English and German Teams) |
 | **Set Teams Status to …** | One command per status (Available, Busy, Do Not Disturb, Be Right Back, Away, Offline), so each can have its own hotkey |
 | **Start Teams Call** | Audio or video call; Teams asks once more before it dials |
