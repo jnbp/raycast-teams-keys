@@ -9,5 +9,6 @@
 - Set your Teams status: Available, Busy, Do Not Disturb, Be Right Back, Away, Offline – with a dropdown or one command per status
 - Start audio or video calls
 - Teams Meetings and Join Next Teams Meeting, read from the macOS calendar
+- Join Teams Meeting lets you pick from what is running now, later today and tomorrow
 - Join any Teams meeting link from the argument or the clipboard, with Outlook Safe Links unwrapped
 - Schedule Teams Meeting fills in the new meeting form in Teams
